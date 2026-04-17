@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<style>
+body{margin:0;padding:16px;font-family:sans-serif;background:transparent;}
+.cell-attend { fill: #A8DCC8; }
+.cell-block   { fill: #F5B49A; }
+.cell-pad     { fill: #E0D0F8; }
+</style>
+</head><body>
+<svg width="100%" viewBox="0 0 680 400" role="img">
+<title>Padding mask vs look-ahead mask</title>
+
+<!-- PADDING MASK -->
+<text font-size="14" font-weight="600" x="170" y="30" text-anchor="middle" fill="#111">Padding mask</text>
+<text font-size="11" x="170" y="46" text-anchor="middle" fill="#444">used in encoder self-attention</text>
+<text font-size="11" x="170" y="60" text-anchor="middle" fill="#444">and decoder cross-attention</text>
+
+<!-- column headers -->
+<text font-size="11" font-weight="600" x="96"  y="88" text-anchor="middle" fill="#333">ana</text>
+<text font-size="11" font-weight="600" x="136" y="88" text-anchor="middle" fill="#333">talib</text>
+<text font-size="11" font-weight="600" x="176" y="88" text-anchor="middle" fill="#333">fi</text>
+<text font-size="11" font-weight="600" x="216" y="88" text-anchor="middle" fill="#555">&lt;pad&gt;</text>
+<text font-size="11" font-weight="600" x="256" y="88" text-anchor="middle" fill="#555">&lt;pad&gt;</text>
+
+<!-- row headers -->
+<text font-size="11" font-weight="600" x="58" y="110" text-anchor="end" fill="#333">ana</text>
+<text font-size="11" font-weight="600" x="58" y="150" text-anchor="end" fill="#333">talib</text>
+<text font-size="11" font-weight="600" x="58" y="190" text-anchor="end" fill="#333">fi</text>
+<text font-size="11" font-weight="600" x="58" y="230" text-anchor="end" fill="#555">&lt;pad&gt;</text>
+<text font-size="11" font-weight="600" x="58" y="270" text-anchor="end" fill="#555">&lt;pad&gt;</text>
+
+<!-- 5x5 grid — attend = green, blocked pad = coral -->
+<!-- row 1: ana -->
+<rect x="76"  y="94" width="40" height="32" rx="4" class="cell-attend"/>
+<rect x="116" y="94" width="40" height="32" rx="4" class="cell-attend"/>
+<rect x="156" y="94" width="40" height="32" rx="4" class="cell-attend"/>
+<rect x="196" y="94" width="40" height="32" rx="4" class="cell-block"/>
+<rect x="236" y="94" width="40" height="32" rx="4" class="cell-block"/>
+<!-- row 2: talib -->
+<rect x="76"  y="130" width="40" height="32" rx="4" class="cell-attend"/>
+<rect x="116" y="130" width="40" height="32" rx="4" class="cell-attend"/>
+<rect x="156" y="130" width="40" height="32" rx="4" class="cell-attend"/>
+<rect x="196" y="130" width="40" height="32" rx="4" class="cell-block"/>
+<rect x="236" y="130" width="40" height="32" rx="4" class="cell-block"/>
+<!-- row 3: fi -->
+<rect x="76"  y="166" width="40" height="32" rx="4" class="cell-attend"/>
+<rect x="116" y="166" width="40" height="32" rx="4" class="cell-attend"/>
+<rect x="156" y="166" width="40" height="32" rx="4" class="cell-attend"/>
+<rect x="196" y="166" width="40" height="32" rx="4" class="cell-block"/>
+<rect x="236" y="166" width="40" height="32" rx="4" class="cell-block"/>
+<!-- row 4: pad -->
+<rect x="76"  y="202" width="40" height="32" rx="4" class="cell-block"/>
+<rect x="116" y="202" width="40" height="32" rx="4" class="cell-block"/>
+<rect x="156" y="202" width="40" height="32" rx="4" class="cell-block"/>
+<rect x="196" y="202" width="40" height="32" rx="4" class="cell-block"/>
+<rect x="236" y="202" width="40" height="32" rx="4" class="cell-block"/>
+<!-- row 5: pad -->
+<rect x="76"  y="238" width="40" height="32" rx="4" class="cell-block"/>
+<rect x="116" y="238" width="40" height="32" rx="4" class="cell-block"/>
+<rect x="156" y="238" width="40" height="32" rx="4" class="cell-block"/>
+<rect x="196" y="238" width="40" height="32" rx="4" class="cell-block"/>
+<rect x="236" y="238" width="40" height="32" rx="4" class="cell-block"/>
+
+<text font-size="11" x="170" y="295" text-anchor="middle" fill="#1a7a5e" font-weight="600">Green = can attend</text>
+<text font-size="11" x="170" y="310" text-anchor="middle" fill="#b04420" font-weight="600">Coral = blocked (set to −∞ before softmax)</text>
+<text font-size="11" x="170" y="326" text-anchor="middle" fill="#444">Padding tokens carry no meaning — we block them</text>
+
+
+<!-- LOOK-AHEAD MASK -->
+<text font-size="14" font-weight="600" x="510" y="30" text-anchor="middle" fill="#111">Look-ahead mask</text>
+<text font-size="11" x="510" y="46" text-anchor="middle" fill="#444">used only in decoder masked self-attention</text>
+<text font-size="11" x="510" y="60" text-anchor="middle" fill="#444">prevents seeing future tokens</text>
+
+<!-- column headers -->
+<text font-size="11" font-weight="600" x="396" y="88" text-anchor="middle" fill="#333">I</text>
+<text font-size="11" font-weight="600" x="436" y="88" text-anchor="middle" fill="#333">am</text>
+<text font-size="11" font-weight="600" x="476" y="88" text-anchor="middle" fill="#333">a</text>
+<text font-size="11" font-weight="600" x="516" y="88" text-anchor="middle" fill="#333">student</text>
+<text font-size="11" font-weight="600" x="556" y="88" text-anchor="middle" fill="#333">at</text>
+
+<!-- row headers -->
+<text font-size="11" font-weight="600" x="362" y="110" text-anchor="end" fill="#333">I</text>
+<text font-size="11" font-weight="600" x="362" y="150" text-anchor="end" fill="#333">am</text>
+<text font-size="11" font-weight="600" x="362" y="190" text-anchor="end" fill="#333">a</text>
+<text font-size="11" font-weight="600" x="362" y="230" text-anchor="end" fill="#333">student</text>
+<text font-size="11" font-weight="600" x="362" y="270" text-anchor="end" fill="#333">at</text>
+
+<!-- lower triangular = attend, upper = blocked -->
+<!-- row 1: I -->
+<rect x="376" y="94" width="40" height="32" rx="4" class="cell-attend"/>
+<rect x="416" y="94" width="40" height="32" rx="4" class="cell-block"/>
+<rect x="456" y="94" width="40" height="32" rx="4" class="cell-block"/>
+<rect x="496" y="94" width="40" height="32" rx="4" class="cell-block"/>
+<rect x="536" y="94" width="40" height="32" rx="4" class="cell-block"/>
+<!-- row 2: am -->
+<rect x="376" y="130" width="40" height="32" rx="4" class="cell-attend"/>
+<rect x="416" y="130" width="40" height="32" rx="4" class="cell-attend"/>
+<rect x="456" y="130" width="40" height="32" rx="4" class="cell-block"/>
+<rect x="496" y="130" width="40" height="32" rx="4" class="cell-block"/>
+<rect x="536" y="130" width="40" height="32" rx="4" class="cell-block"/>
+<!-- row 3: a -->
+<rect x="376" y="166" width="40" height="32" rx="4" class="cell-attend"/>
+<rect x="416" y="166" width="40" height="32" rx="4" class="cell-attend"/>
+<rect x="456" y="166" width="40" height="32" rx="4" class="cell-attend"/>
+<rect x="496" y="166" width="40" height="32" rx="4" class="cell-block"/>
+<rect x="536" y="166" width="40" height="32" rx="4" class="cell-block"/>
+<!-- row 4: student -->
+<rect x="376" y="202" width="40" height="32" rx="4" class="cell-attend"/>
+<rect x="416" y="202" width="40" height="32" rx="4" class="cell-attend"/>
+<rect x="456" y="202" width="40" height="32" rx="4" class="cell-attend"/>
+<rect x="496" y="202" width="40" height="32" rx="4" class="cell-attend"/>
+<rect x="536" y="202" width="40" height="32" rx="4" class="cell-block"/>
+<!-- row 5: at -->
+<rect x="376" y="238" width="40" height="32" rx="4" class="cell-attend"/>
+<rect x="416" y="238" width="40" height="32" rx="4" class="cell-attend"/>
+<rect x="456" y="238" width="40" height="32" rx="4" class="cell-attend"/>
+<rect x="496" y="238" width="40" height="32" rx="4" class="cell-attend"/>
+<rect x="536" y="238" width="40" height="32" rx="4" class="cell-attend"/>
+
+<text font-size="11" x="510" y="295" text-anchor="middle" fill="#1a7a5e" font-weight="600">Green = can attend (past + self)</text>
+<text font-size="11" x="510" y="310" text-anchor="middle" fill="#b04420" font-weight="600">Coral = blocked (future tokens)</text>
+<text font-size="11" x="510" y="326" text-anchor="middle" fill="#444">When generating "am", future words don't exist yet</text>
+
+<!-- divider -->
+<line x1="340" y1="70" x2="340" y2="350" stroke="#ccc" stroke-width="1" stroke-dasharray="4 3"/>
+
+<text font-size="11" x="340" y="378" text-anchor="middle" fill="#555">Both masks set blocked positions to −∞ so softmax makes their weight ≈ 0</text>
+<text font-size="11" x="340" y="395" text-anchor="middle" fill="#555">In code: attn_scores.masked_fill(mask == 0, float('-inf'))</text>
+</svg>
+</body></html>

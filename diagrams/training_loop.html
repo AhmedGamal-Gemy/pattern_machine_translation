@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<style>body{margin:0;padding:16px;font-family:sans-serif;background:transparent;}</style>
+</head><body>
+<svg width="100%" viewBox="0 0 680 500" role="img">
+<title>Training loop — one full step</title>
+<defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="#555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+  <marker id="arrow-wb" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="#4a40b0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+</defs>
+
+<text font-size="15" font-weight="600" x="340" y="24" text-anchor="middle" fill="#111">Training loop — one batch step</text>
+
+<!-- Batch -->
+<rect x="200" y="38" width="280" height="44" rx="8" fill="#E8E8E8" stroke="#999" stroke-width="0.8"/>
+<text font-size="13" font-weight="600" x="340" y="56" text-anchor="middle" dominant-baseline="central" fill="#111">Batch from DataLoader</text>
+<text font-size="11" x="340" y="74" text-anchor="middle" dominant-baseline="central" fill="#333">src (B,S) · tgt_in (B,T) · tgt_out (B,T)</text>
+
+<line x1="340" y1="82" x2="340" y2="106" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+<!-- Forward pass -->
+<rect x="180" y="110" width="320" height="44" rx="8" fill="#A8DCC8" stroke="#1a7a5e" stroke-width="0.8"/>
+<text font-size="13" font-weight="600" x="340" y="128" text-anchor="middle" dominant-baseline="central" fill="#111">Forward pass — model(src, tgt_in)</text>
+<text font-size="11" x="340" y="146" text-anchor="middle" dominant-baseline="central" fill="#0a2a20">logits shape: (B, T, 8000)</text>
+
+<line x1="340" y1="154" x2="340" y2="178" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+<!-- Loss -->
+<rect x="180" y="182" width="320" height="44" rx="8" fill="#F5B49A" stroke="#b04420" stroke-width="0.8"/>
+<text font-size="13" font-weight="600" x="340" y="200" text-anchor="middle" dominant-baseline="central" fill="#111">CrossEntropyLoss(logits, tgt_out)</text>
+<text font-size="11" x="340" y="218" text-anchor="middle" dominant-baseline="central" fill="#2a0e02">ignore &lt;pad&gt; · label smoothing = 0.1</text>
+
+<line x1="340" y1="226" x2="340" y2="250" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+<!-- Backward -->
+<rect x="200" y="254" width="280" height="44" rx="8" fill="#F5B49A" stroke="#b04420" stroke-width="0.8"/>
+<text font-size="13" font-weight="600" x="340" y="272" text-anchor="middle" dominant-baseline="central" fill="#111">loss.backward()</text>
+<text font-size="11" x="340" y="290" text-anchor="middle" dominant-baseline="central" fill="#2a0e02">computes gradients for every weight</text>
+
+<line x1="340" y1="298" x2="340" y2="322" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+<!-- Grad clip -->
+<rect x="200" y="326" width="280" height="40" rx="8" fill="#E8E8E8" stroke="#999" stroke-width="0.8"/>
+<text font-size="13" font-weight="600" x="340" y="346" text-anchor="middle" dominant-baseline="central" fill="#111">Gradient clipping — max norm 1.0</text>
+
+<line x1="340" y1="366" x2="340" y2="390" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+<!-- Optimizer step -->
+<rect x="200" y="394" width="280" height="44" rx="8" fill="#C8C2F0" stroke="#4a40b0" stroke-width="0.8"/>
+<text font-size="13" font-weight="600" x="340" y="412" text-anchor="middle" dominant-baseline="central" fill="#111">optimizer.step() + scheduler.step()</text>
+<text font-size="11" x="340" y="430" text-anchor="middle" dominant-baseline="central" fill="#110d40">Adam · warmup 4000 steps → inv sqrt decay</text>
+
+<!-- W&B logging branch -->
+<path d="M 482 220 L 600 220 L 600 412" fill="none" stroke="#4a40b0" stroke-width="1.5" stroke-dasharray="5 3"/>
+<rect x="580" y="430" width="82" height="32" rx="6" fill="#C8C2F0" stroke="#4a40b0" stroke-width="0.8"/>
+<text font-size="11" font-weight="600" x="621" y="446" text-anchor="middle" dominant-baseline="central" fill="#111">W&amp;B log</text>
+<path d="M 600 412 L 600 430" fill="none" stroke="#4a40b0" stroke-width="1.5" marker-end="url(#arrow-wb)" stroke-dasharray="5 3"/>
+
+<text font-size="11" x="648" y="420" text-anchor="middle" fill="#4a40b0">train</text>
+<text font-size="11" x="648" y="434" text-anchor="middle" fill="#4a40b0">_loss</text>
+
+<text font-size="11" x="340" y="480" text-anchor="middle" fill="#555">At end of each epoch: run validation → compute val_loss + BLEU → W&amp;B log → maybe save checkpoint</text>
+</svg>
+</body></html>
