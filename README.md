@@ -42,7 +42,7 @@ uv --version
 ### 2. Clone the Project
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/AhmedGamal-Gemy/pattern_machine_translation
 cd pattern_machine_translation
 ```
 
@@ -111,7 +111,7 @@ uv run python -m streamlit run app.py
 
 ---
 
-## Overview
+## Results
 
 This project demonstrates Arabic→English neural machine translation using two approaches:
 
@@ -187,67 +187,6 @@ nmt-transformer/
 └── checkpoints/
     ├── best.pt        # From-scratch model
     └── helsinki_best/ # Fine-tuned Helsinki
-```
-
-## Setup & Installation
-
-```bash
-# Install dependencies
-uv sync
-
-# Or add specific packages
-uv add torch transformers sentencepiece sacrebleu streamlit sacremoses
-```
-
-**Note**: Install your specific PyTorch CUDA version:
-```bash
-pip install torch --index-url https://download.pytorch.org/whl/YOUR_CUDA_VERSION
-```
-
-## Usage
-
-### Train from-scratch Transformer
-
-```bash
-# Download data
-uv run python dataset.py --download
-
-# Train
-uv run python train.py --epochs 30
-
-# Evaluate
-uv run python evaluate.py
-```
-
-### Fine-tune Helsinki
-
-```bash
-# Fine-tune on the dataset
-uv run python finetune.py
-```
-
-### Run Streamlit Demo
-
-```bash
-uv run python -m streamlit run app.py
-```
-
-Then open http://localhost:8501 in your browser.
-
-### CLI Translation
-
-```bash
-# Using from-scratch model
-uv run python translate.py --checkpoint checkpoints/best.pt --text "مرحبا"
-
-# Using Helsinki (requires model loaded differently)
-```
-
-### FastAPI Backend
-
-```bash
-uv run uvicorn app:app --host 0.0.0.0 --port 8000
-# POST http://localhost:8000/translate {"text": "مرحبا"}
 ```
 
 ## Training Details
