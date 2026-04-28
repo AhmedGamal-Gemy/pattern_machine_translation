@@ -511,9 +511,8 @@ with tab_viz:
                 # attn shape: [num_heads, tgt_len, src_len]
                 avg_attn = attn.mean(dim=0)[0].detach().cpu().numpy()
 
-                # Decode tokens
-                src_tokens = sp_ar.decode(source_ids).split()
-                tgt_tokens = ["<s>"]
+                # Reverse source tokens for RTL Arabic display
+                src_tokens = sp_ar.decode(source_ids).split()[::-1]
 
                 fig, ax = plt.subplots(figsize=(10, 8))
                 sns.heatmap(
@@ -524,9 +523,8 @@ with tab_viz:
                     yticklabels=tgt_tokens,
                 )
 
-                # RTL for Arabic
-                ax.xaxis.set_tick_params(labelrotation=0)
-                ax.set_xlabel("Source (Arabic) - RTL", fontfamily="Arial")
+                # Labels
+                ax.set_xlabel("Source (Arabic) ← RTL", fontfamily="Arial")
                 ax.set_ylabel("Target (English)")
                 ax.set_title(f"Cross-Attention: {viz_text}")
 
