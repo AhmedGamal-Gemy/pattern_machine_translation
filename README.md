@@ -1,119 +1,8 @@
-# Neural Machine Translation: Arabic → English
+# Neural Machine Translation: English → Arabic
 
-## Installation (Step-by-Step)
+## Overview
 
-### 1. Install uv (Package Manager)
-
-uv is a fast Python package manager.
-
-**Windows (PowerShell):**
-```powershell
-# Install uv
-irm https://astral.sh/uv/install.ps1 | iex
-
-# Add to PATH temporarily for current session
-$env:PATH = "$env:PATH;$env:LOCALAPPDATA\uv\bin"
-
-# Or restart terminal and verify
-uv --version
-```
-
-**Windows (CMD):**
-```cmd
-# Download and run the installer
-curl -LsSf https://astral.sh/uv/install.bat | bat
-
-# Restart terminal and verify
-uv --version
-```
-
-**macOS / Linux:**
-```bash
-# Install uv
-curl -LsSf https://astral.sh/uv/install.sh | sh
-
-# Add to PATH
-export PATH="$HOME/.local/bin:$PATH"
-
-# Verify
-uv --version
-```
-
-### 2. Clone the Project
-
-```bash
-git clone https://github.com/AhmedGamal-Gemy/pattern_machine_translation
-cd pattern_machine_translation
-```
-
-### 3. Create Virtual Environment
-
-```bash
-# Create and activate environment
-uv venv
-uv sync
-```
-
-If sync fails due to PyTorch, install PyTorch separately:
-
-```bash
-# For CUDA 12.1 (most GPUs)
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
-
-# For CPU only
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
-
-# Then sync remaining packages
-uv sync
-```
-
-### 4. Install Additional Dependencies
-
-```bash
-# Core ML packages
-uv add transformers sentencepiece sacrebleu
-
-# UI packages
-uv add streamlit
-
-# Visualization
-uv add matplotlib seaborn
-```
-
-### 5. Verify Installation
-
-```bash
-# Check Python version
-python --version
-
-# Check PyTorch
-python -c "import torch; print(f'PyTorch: {torch.__version__}'); print(f'CUDA: {torch.cuda.is_available()}')"
-
-# Check transformers
-python -c "import transformers; print(f'Transformers: {transformers.__version__}')"
-```
-
-### Quick Start Commands
-
-```bash
-# Download data
-uv run python dataset.py --download
-
-# Train from-scratch
-uv run python train.py --epochs 30
-
-# Fine-tune Helsinki
-uv run python finetune.py
-
-# Run demo
-uv run python -m streamlit run app.py
-```
-
----
-
-## Results
-
-This project demonstrates Arabic→English neural machine translation using two approaches:
+This project demonstrates English→Arabic neural machine translation using two approaches:
 
 1. **From-Scratch Transformer** - Complete implementation of Vaswani et al. (2017)
 2. **Helsinki-NLP Fine-tuned** - Pre-trained MarianMT model fine-tuned on the same dataset
@@ -122,10 +11,11 @@ The project compares these approaches to show the critical importance of pre-tra
 
 ## Results
 
-| Model | Val BLEU | Test BLEU | Parameters | Training Data |
-|-------|---------|----------|-----------|-------------|
-| From-Scratch Transformer | ~3.5 | ~3-5 | 10.1M | 8,593 pairs |
-| Helsinki Fine-tuned | 55.36 | 50.92 | 74M | Pretrained 60M+ → fine-tuned 8,593 |
+| Model | Test BLEU | Parameters | Training Data |
+|-------|-----------|------------|--------------|
+| From-Scratch | ~3-5 | 10.1M | 8,593 pairs |
+| Helsinki Zero-shot | 39.71 | 74M | 60M+ pairs (pre-trained) |
+| Helsinki Fine-tuned | 50.92 | 74M | 60M+ → 8,593 pairs |
 
 ## Architecture
 

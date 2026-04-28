@@ -1,5 +1,5 @@
 """
-Streamlit App for Arabic→English NMT Demo.
+Streamlit App for English→Arabic NMT Demo.
 
 Features:
 1. Model selector (Helsinki fine-tuned vs From-Scratch Transformer)
@@ -19,7 +19,7 @@ from typing import Optional, Tuple
 
 # ========== Page Config ==========
 st.set_page_config(
-    page_title="Arabic→English NMT",
+    page_title="English→Arabic NMT",
     page_icon="🈚",
     layout="wide",
 )
@@ -61,8 +61,8 @@ def load_from_scratch_model() -> Tuple[
 
         # Load Transformer
         model = Transformer(
-            src_vocab_size=config.vocab_size_ar,
-            tgt_vocab_size=config.vocab_size_en,
+            src_vocab_size=config.vocab_size_en,
+            tgt_vocab_size=config.vocab_size_ar,
             d_model=config.d_model,
             num_heads=config.num_heads,
             num_layers=config.num_layers,
@@ -100,7 +100,7 @@ def load_helsinki_model(
             return None, None, device
     else:
         # Zero-shot: use base pretrained model
-        checkpoint_path = "Helsinki-NLP/opus-mt-ar-en"
+        checkpoint_path = "Helsinki-NLP/opus-mt-en-ar"
 
     try:
         from transformers import MarianMTModel, MarianTokenizer
@@ -131,7 +131,7 @@ def translate_from_scratch(
 
     # Clean and tokenize source
     source_clean = clean_arabic(source_text)
-    source_ids = sp_ar.encode(source_clean)
+    source_ids = sp_en.encode(source_clean)
     src = torch.tensor([source_ids], dtype=torch.long).to(device)
 
     with torch.no_grad():
@@ -175,7 +175,7 @@ def translate_from_scratch(
         ]
 
         # Decode
-        translation = sp_en.decode(tgt_ids_clean)
+        translation = sp_ar.decode(tgt_ids_clean)
 
     return translation
 
@@ -200,7 +200,7 @@ def translate_helsinki(
 
 # ========== UI ==========
 
-st.title("🈚 Arabic → English Neural Machine Translation")
+st.title("🈚 English → Arabic Neural Machine Translation")
 st.markdown(
     "Compare **From-Scratch Transformer** vs **Helsinki-NLP Fine-tuned** models"
 )
@@ -272,14 +272,14 @@ tab_translate, tab_compare, tab_viz, tab_about = st.tabs(
 
 # ======== Tab 1: Translation ========
 with tab_translate:
-    st.subheader("Translate Arabic to English")
+    st.subheader("Translate English to Arabic")
 
     # Arabic input with RTL styling
     col1, col2 = st.columns([3, 1])
 
     with col1:
         source_text = st.text_area(
-            "Enter Arabic text:",
+            "Enter English text:",
             placeholder="أدخل النص بالعربية هنا...\nمرحبا بك",
             height=150,
             key="source_input",
@@ -361,7 +361,7 @@ with tab_compare:
     st.subheader("Compare All Models")
 
     compare_text = st.text_input(
-        "Enter Arabic text to compare:",
+        "Enter English text to compare:",
         placeholder="أدخل النص بالعربية",
         key="compare_input",
     )
@@ -464,7 +464,7 @@ with tab_viz:
 
             # Encode source
             source_clean = clean_arabic(viz_text)
-            source_ids = sp_ar.encode(source_clean)
+            source_ids = sp_en.encode(source_clean)
             src = torch.tensor([source_ids], dtype=torch.long).to(device)
 
             # Encode source first
@@ -511,8 +511,13 @@ with tab_viz:
                 # attn shape: [num_heads, tgt_len, src_len]
                 avg_attn = attn.mean(dim=0)[0].detach().cpu().numpy()
 
-                # Reverse source tokens for RTL Arabic display
-                src_tokens = sp_ar.decode(source_ids).split()[::-1]
+                # English source tokens (no reversal needed)
+                src_tokens = sp_en.decode(source_ids).split()
+
+                # Arabic target tokens
+                tgt_tokens = (
+                    sp_ar.decode(tgt_ids_clean).split() if tgt_ids_clean else ["<s>"]
+                )
 
                 fig, ax = plt.subplots(figsize=(10, 8))
                 sns.heatmap(
@@ -606,7 +611,7 @@ with tab_about:
     **Result**: BLEU ~3-5 - essentially hallucination due to tiny dataset
     
     ### 2. Helsinki Model
-    Pre-trained Helsinki-NLP/opus-mt-ar-en (MarianMT):
+    Pre-trained Helsinki-NLP/opus-mt-en-ar (MarianMT):
     - Pre-trained on 60M+ Arabic-English pairs
     - Zero-shot BLEU: 39.71 (no fine-tuning!)
     - Fine-tuned BLEU: 50.92 (on 8,593 pairs)
