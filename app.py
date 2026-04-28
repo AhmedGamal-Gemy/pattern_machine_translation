@@ -467,24 +467,44 @@ with tab_viz:
             source_ids = sp_ar.encode(source_clean)
             src = torch.tensor([source_ids], dtype=torch.long).to(device)
 
-            # First: run inference to capture attention weights
+            # Encode source first
             src_padding_mask = scr_model.generate_padding_mask(src)
             encoder_output = scr_model.encoder(src, src_padding_mask)
 
-            # Do one decode step to trigger attention
-            tgt = torch.tensor([[config.SOS_ID]], dtype=torch.long).to(device)
-            tgt_padding_mask = scr_model.generate_padding_mask(tgt)
-            look_ahead_mask = scr_model.generate_look_ahead_mask(tgt.size(1), device)
-            tgt_mask = tgt_padding_mask & look_ahead_mask
+            # Full translation to get target tokens
+            tgt_ids = [config.SOS_ID]
+            for _ in range(50):
+                tgt = torch.tensor([tgt_ids], dtype=torch.long).to(device)
+                tgt_padding_mask = scr_model.generate_padding_mask(tgt)
+                look_ahead_mask = scr_model.generate_look_ahead_mask(
+                    tgt.size(1), device
+                )
+                tgt_mask = tgt_padding_mask & look_ahead_mask
 
-            _ = scr_model.decoder(
-                tgt,
-                encoder_output,
-                tgt_mask=tgt_mask,
-                src_mask=src_padding_mask,
+                decoder_output = scr_model.decoder(
+                    tgt,
+                    encoder_output,
+                    tgt_mask=tgt_mask,
+                    src_mask=src_padding_mask,
+                )
+                logits = scr_model.fc_out(decoder_output)
+                next_token = logits[0, -1, :].argmax().item()
+
+                if next_token == config.EOS_ID or len(tgt_ids) > 45:
+                    break
+                tgt_ids.append(next_token)
+
+            # Get target tokens (English)
+            tgt_ids_clean = [
+                t
+                for t in tgt_ids
+                if t not in (config.SOS_ID, config.EOS_ID, config.PAD_ID)
+            ]
+            tgt_tokens = (
+                sp_en.decode(tgt_ids_clean).split() if tgt_ids_clean else ["<s>"]
             )
 
-            # Now get the attention weights
+            # Get attention after full decode
             attn = scr_model.get_cross_attention_weights(0)
 
             if attn is not None:
