@@ -226,29 +226,35 @@ with st.sidebar:
         **Helsinki-NLP (Fine-tuned)**
         
         - Architecture: MarianMT (Transformer)
-        - BLEU: 50.92 (test)
         - Parameters: ~74M
-        - Pre-trained → fine-tuned on 8,593 pairs
+        - Layers: 6 encoder + 6 decoder
+        - d_model: 512, heads: 8
+        - Vocab: 60k+ (BPE)
+        - BLEU: 50.92 (test)
+        - Pre-trained on 60M+ pairs → fine-tuned on 8,593
         """)
     elif "Zero-shot" in model_choice:
         st.markdown("""
         **Helsinki-NLP (Zero-shot)**
         
         - Architecture: MarianMT (Transformer)
-        - BLEU: 39.71 (test, no fine-tuning)
         - Parameters: ~74M
-        - Direct inference, no training
+        - Layers: 6 encoder + 6 decoder
+        - d_model: 512, heads: 8
+        - Vocab: 60k+ (BPE)
+        - BLEU: 39.71 (test)
+        - Direct inference, no fine-tuning
         """)
     elif model_choice == "From-Scratch Transformer":
         st.markdown("""
         **Custom Transformer (Vaswani 2017)**
         
-        - d_model: 256
-        - num_heads: 8
-        - num_layers: 3
-        - d_ff: 512
-        - BLEU: ~3-5
+        - Architecture: Transformer (from scratch)
         - Parameters: 10.1M
+        - Layers: 3 encoder + 3 decoder
+        - d_model: 256, heads: 8, d_ff: 512
+        - Vocab: 8k (SentencePiece BPE)
+        - BLEU: ~3-5
         """)
     else:
         st.markdown("""
