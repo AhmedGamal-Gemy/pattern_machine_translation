@@ -524,18 +524,35 @@ with tab_viz:
         except Exception as e:
             st.error(f"Error: {e}")
 
-    # Also show architecture diagrams
-    st.markdown("---")
-    st.subheader("Architecture Diagrams")
+    # Architecture section
+    st.markdown("### Architecture Diagrams")
 
-    diagram_files = [
-        ("Transformer Architecture", "diagrams/transformer_architecture.html"),
+    arch_diagrams = [
+        ("From-Scratch Transformer", "diagrams/transformer_architecture.html"),
         ("Encoder Layer", "diagrams/encoder_layer.html"),
         ("Decoder Layer", "diagrams/decoder_layer.html"),
         ("Attention Mechanism", "diagrams/attention_mechanism.html"),
+        ("Training Loop", "diagrams/training_loop.html"),
+        ("Masks", "diagrams/masks.html"),
     ]
 
-    for title, path in diagram_files:
+    # Mermaid diagrams
+    mermaid_diagrams = [
+        ("MarianMT Architecture", "diagrams/marianmt_architecture.mmd"),
+    ]
+
+    # Show Mermaid diagrams using markdown
+    st.markdown("##### Mermaid Diagrams")
+    for title, path in mermaid_diagrams:
+        if Path(path).exists():
+            with open(path, "r", encoding="utf-8") as f:
+                mmd_content = f.read()
+            st.markdown(f"**{title}**")
+            st.mermaid(mmd_content)
+
+    # Show HTML diagrams
+    st.markdown("##### HTML Diagrams")
+    for title, path in arch_diagrams:
         if Path(path).exists():
             st.markdown(f"**{title}**")
             with open(path, "r", encoding="utf-8") as f:

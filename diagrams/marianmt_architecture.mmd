@@ -1,0 +1,41 @@
+flowchart TB
+    subgraph Input["Input"]
+        A[Arabic Text]
+    end
+    
+    subgraph Encoder["Encoder (6 layers)"]
+        B[Embedding + Positional]
+        C[Multi-Head Attention]
+        D[Feed Forward]
+        E[Add & Norm]
+    end
+    
+    subgraph Decoder["Decoder (6 layers)"]
+        F[Embedding + Positional]
+        G[Masked Self-Attention]
+        H[Cross-Attention]
+        I[Feed Forward]
+        J[Add & Norm]
+    end
+    
+    subgraph Output["Output"]
+        K[Linear + Softmax]
+        L[English Text]
+    end
+    
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+    E -->| Encoder Output | H
+    F --> G
+    G --> H
+    H --> I
+    I --> J
+    J --> K
+    K --> L
+    
+    style Input fill:#1e3a5f,color:#fff
+    style Encoder fill:#2d5a87,color:#fff
+    style Decoder fill:#2d5a87,color:#fff
+    style Output fill:#1e3a5f,color:#fff
