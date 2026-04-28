@@ -150,7 +150,17 @@ Architecture details:
 
 - **Base model**: Helsinki-NLP/opus-mt-ar-en
 - **Architecture**: MarianMT (Transformer encoder-decoder)
+- **Parameters**: ~74M
+- **Vocabulary**: 60k+ (BPE)
+- **Layers**: 6 encoder + 6 decoder
+- **d_model**: 512
+- **Attention heads**: 8
 - **Fine-tuning**: 10 epochs, LR 2e-5, batch 32, linear warmup
+
+**Why MarianMT**:
+- Pre-trained on 60M+ Arabic-English sentence pairs
+- Strong zero-shot transfer to new domains
+- Light fine-tuning on limited data (8.5K pairs) yields 50+ BLEU
 
 ## Key Finding
 
