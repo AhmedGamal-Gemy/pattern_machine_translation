@@ -525,24 +525,48 @@ with tab_viz:
             st.error(f"Error: {e}")
 
     # Architecture section
-    st.markdown("### Architecture Diagrams")
+    st.markdown("---")
+    st.subheader("Architecture Diagrams")
 
-    arch_diagrams = [
-        ("MarianMT Architecture", "diagrams/marianmt_architecture.html"),
-        ("Transformer Architecture", "diagrams/transformer_architecture.html"),
-        ("Encoder Layer", "diagrams/encoder_layer.html"),
-        ("Decoder Layer", "diagrams/decoder_layer.html"),
-        ("Attention Mechanism", "diagrams/attention_mechanism.html"),
-        ("Training Loop", "diagrams/training_loop.html"),
-        ("Masks", "diagrams/masks.html"),
-    ]
+    # Use expanders for better organization
+    with st.expander("📐 MarianMT Architecture", expanded=True):
+        if Path("diagrams/marianmt_architecture.html").exists():
+            with open(
+                "diagrams/marianmt_architecture.html", "r", encoding="utf-8"
+            ) as f:
+                st.components.v1.html(f.read(), height=300, scrolling=True)
 
-    for title, path in arch_diagrams:
-        if Path(path).exists():
-            st.markdown(f"**{title}**")
-            with open(path, "r", encoding="utf-8") as f:
-                html_content = f.read()
-            st.components.v1.html(html_content, height=400, scrolling=True)
+    with st.expander("🏗️ Transformer Architecture"):
+        if Path("diagrams/transformer_architecture.html").exists():
+            with open(
+                "diagrams/transformer_architecture.html", "r", encoding="utf-8"
+            ) as f:
+                st.components.v1.html(f.read(), height=300, scrolling=True)
+
+    with st.expander("🔲 Encoder Layer"):
+        if Path("diagrams/encoder_layer.html").exists():
+            with open("diagrams/encoder_layer.html", "r", encoding="utf-8") as f:
+                st.components.v1.html(f.read(), height=300, scrolling=True)
+
+    with st.expander("🔄 Decoder Layer"):
+        if Path("diagrams/decoder_layer.html").exists():
+            with open("diagrams/decoder_layer.html", "r", encoding="utf-8") as f:
+                st.components.v1.html(f.read(), height=300, scrolling=True)
+
+    with st.expander("👁️ Attention Mechanism"):
+        if Path("diagrams/attention_mechanism.html").exists():
+            with open("diagrams/attention_mechanism.html", "r", encoding="utf-8") as f:
+                st.components.v1.html(f.read(), height=300, scrolling=True)
+
+    with st.expander("🔄 Training Loop"):
+        if Path("diagrams/training_loop.html").exists():
+            with open("diagrams/training_loop.html", "r", encoding="utf-8") as f:
+                st.components.v1.html(f.read(), height=300, scrolling=True)
+
+    with st.expander("🎭 Masks"):
+        if Path("diagrams/masks.html").exists():
+            with open("diagrams/masks.html", "r", encoding="utf-8") as f:
+                st.components.v1.html(f.read(), height=300, scrolling=True)
 
 
 # ======== Tab 4: About ========

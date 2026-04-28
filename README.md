@@ -166,11 +166,13 @@ Architecture details:
 
 **Dataset size is the critical bottleneck**:
 
-1. **Exposure bias**: With only 8,593 training pairs, the from-scratch model sees each example only ~135 times per epoch. The model memorizes common phrases but fails to generalize.
+1. **Best Model: Helsinki Zero-shot**: Without any fine-tuning, Helsinki achieves **39.71 BLEU** - the best result. The pre-trained model already knows Arabic→English translation from 60M+ pairs.
 
-2. **Overfitting**: Train loss ~1.4 vs val loss ~3.4 (huge gap). The model fits training data but doesn't generalize to unseen examples.
+2. **Fine-tuning Hurt**: When fine-tuned on this small dataset (8,593 pairs), the model degraded. Fine-tuning on insufficient data caused the model to overfit to the limited patterns, resulting in worse generalization.
 
-3. **Pretraining wins**: Helsinki-NLP was pre-trained on 60M+ Arabic-English pairs. Even zero-shot (39.71 BLEU) beats the from-scratch model by 10x. Fine-tuning pushes it to 50.92.
+3. **From-Scratch = Near Hallucination**: With only 8,593 pairs, the from-scratch Transformer (~10M parameters) cannot learn real translation. It essentially memorizes training data and produces near-random output (BLEU ~3-5), essentially hallucinating translations.
+
+4. **The Lesson**: For low-resource NMT (<10K pairs), never train from scratch. Use pre-trained models as-is. Fine-tuning on small data hurts more than helps.
 
 **Conclusion**: For Arabic→English NMT with limited data (under 10K pairs), pre-trained models are essential. A from-scratch Transformer needs 100K+ pairs for decent quality.
 
