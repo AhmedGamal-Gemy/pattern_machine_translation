@@ -528,7 +528,8 @@ with tab_viz:
     st.markdown("### Architecture Diagrams")
 
     arch_diagrams = [
-        ("From-Scratch Transformer", "diagrams/transformer_architecture.html"),
+        ("MarianMT Architecture", "diagrams/marianmt_architecture.html"),
+        ("Transformer Architecture", "diagrams/transformer_architecture.html"),
         ("Encoder Layer", "diagrams/encoder_layer.html"),
         ("Decoder Layer", "diagrams/decoder_layer.html"),
         ("Attention Mechanism", "diagrams/attention_mechanism.html"),
@@ -536,22 +537,6 @@ with tab_viz:
         ("Masks", "diagrams/masks.html"),
     ]
 
-    # Mermaid diagrams
-    mermaid_diagrams = [
-        ("MarianMT Architecture", "diagrams/marianmt_architecture.mmd"),
-    ]
-
-    # Show Mermaid diagrams using markdown
-    st.markdown("##### Mermaid Diagrams")
-    for title, path in mermaid_diagrams:
-        if Path(path).exists():
-            with open(path, "r", encoding="utf-8") as f:
-                mmd_content = f.read()
-            st.markdown(f"**{title}**")
-            st.mermaid(mmd_content)
-
-    # Show HTML diagrams
-    st.markdown("##### HTML Diagrams")
     for title, path in arch_diagrams:
         if Path(path).exists():
             st.markdown(f"**{title}**")
