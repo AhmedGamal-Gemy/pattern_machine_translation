@@ -585,20 +585,28 @@ with tab_about:
     - Sinusoidal positional encoding
     - SentencePiece BPE tokenization
     
-    **Limitation**: With only 8,593 training pairs, the model severely overfits
-    (train loss ~1.4 vs val loss ~3.4). BLEU ~3-5.
+    **Result**: BLEU ~3-5 - essentially hallucination due to tiny dataset
     
-    ### 2. Helsinki Fine-tuned
-    Pre-trained Helsinki-NLP/opus-mt-ar-en fine-tuned on the same dataset:
-    - Leverages 60M+ pre-training pairs
-    - Excellent zero-shot performance: BLEU ~39.71
-    - After fine-tuning: BLEU ~50.92
+    ### 2. Helsinki Model
+    Pre-trained Helsinki-NLP/opus-mt-ar-en (MarianMT):
+    - Pre-trained on 60M+ Arabic-English pairs
+    - Zero-shot BLEU: 39.71 (no fine-tuning!)
+    - Fine-tuned BLEU: 50.92 (on 8,593 pairs)
     
-    ## Key Finding
+    ## Key Findings
     
-    **Dataset size is the bottleneck**: A from-scratch Transformer needs hundreds of 
-    thousands of examples to learn fluent translation. With 8K pairs, 
-    pretraining is essential for reasonable quality.
+    1. **Best for General Use**: Helsinki Zero-shot (39.71 BLEU)
+       - No fine-tuning needed, best generalization
+    
+    2. **Fine-tuning on Small Data Hurts Generalization**
+       - Fine-tuning (50.92) beats zero-shot on TEST SET
+       - BUT may generalize worse to out-of-domain data
+       - Only fine-tune if you have 100K+ pairs
+    
+    3. **From-Scratch = Near Hallucination**
+       - 8,593 pairs is too small for 10M parameters
+       - Model memorizes, doesn't translate
+       - Never train from scratch with <10K pairs
     """)
 
     # Training summary
