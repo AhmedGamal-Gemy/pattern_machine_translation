@@ -95,7 +95,7 @@ def load_helsinki_model(
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
     if finetuned:
-        checkpoint_path = Path("checkpoints/helsinki_best")
+        checkpoint_path = Path("checkpoints/helsinki_en_ar_best")
         if not checkpoint_path.exists():
             return None, None, device
     else:
