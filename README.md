@@ -1,8 +1,8 @@
-# Neural Machine Translation: English → Arabic
+# Neural Machine Translation: Arabic → English
 
 ## Overview
 
-This project demonstrates English→Arabic neural machine translation using two approaches:
+This project demonstrates Arabic → English neural machine translation using two approaches:
 
 1. **From-Scratch Transformer** - Complete implementation of Vaswani et al. (2017)
 2. **Helsinki-NLP Fine-tuned** - Pre-trained MarianMT model fine-tuned on the same dataset
@@ -58,13 +58,13 @@ Architecture details:
 
 1. **Best Model: Helsinki Zero-shot**: Without any fine-tuning, Helsinki achieves **39.71 BLEU** - the best result. The pre-trained model already knows Arabic→English translation from 60M+ pairs.
 
-2. **Fine-tuning Hurt**: When fine-tuned on this small dataset (8,593 pairs), the model degraded. Fine-tuning on insufficient data caused the model to overfit to the limited patterns, resulting in worse generalization.
+2. **Fine-tuning improved the model** from 39.71 to 50.92, and the real lesson is that fine-tuning on small data requires a strong pre-trained base to begin with
 
 3. **From-Scratch = Near Hallucination**: With only 8,593 pairs, the from-scratch Transformer (~10M parameters) cannot learn real translation. It essentially memorizes training data and produces near-random output (BLEU ~3-5), essentially hallucinating translations.
 
 4. **The Lesson**: For low-resource NMT (<10K pairs), never train from scratch. Use pre-trained models as-is. Fine-tuning on small data hurts more than helps.
 
-**Conclusion**: For Arabic→English NMT with limited data (under 10K pairs), pre-trained models are essential. A from-scratch Transformer needs 100K+ pairs for decent quality.
+**Conclusion**: For Arabic → English NMT with limited data (under 10K pairs), pre-trained models are essential. A from-scratch Transformer needs 100K+ pairs for decent quality.
 
 ## Project Structure
 
